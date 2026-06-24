@@ -13,14 +13,12 @@ import { spawn } from 'child_process';
 import type { Terminal } from 'xterm';
 import type { SerializeAddon } from 'xterm-addon-serialize';
 import * as os from 'os';
-import * as tmp from 'tmp';
 import * as fs from 'fs';
 import * as path from 'path';
 import { quote } from 'shell-quote';
 import { IPty } from 'node-pty';
 import { noop } from '../coreUtils';
 import { getNextExecutionOrder } from './executionOrder';
-import { getConfiguration } from '../configuration';
 
 const shell = os.platform() === 'win32' ? 'powershell.exe' : process.env['SHELL'] || 'bash';
 const startSeparator = '51e9f0e8-77a0-4bf0-9733-335153be2ec0:Start';
@@ -180,9 +178,9 @@ class ShellPty {
     public static instance = new ShellPty();
     private static pty: typeof import('node-pty');
     public static available() {
-        if (getConfiguration().disablePseudoTerminal) {
+        /*        if (getConfiguration().disablePseudoTerminal) {
             return false;
-        }
+        }*/
         if (ShellPty.pty) {
             return true;
         }
@@ -224,16 +222,8 @@ class ShellPty {
     }
     public static async execute(task: NotebookCellExecution, token: CancellationToken, cwd?: string) {
         const command = task.cell.document.getText();
-        // eslint-disable-next-line @typescript-eslint/ban-types
-        const tmpFile = await new Promise<{ path: string; cleanupCallback: Function }>((resolve, reject) => {
-            tmp.file({ postfix: '.tmp' }, (err, path, _, cleanupCallback) => {
-                if (err) {
-                    return reject(err);
-                }
-                resolve({ path, cleanupCallback });
-            });
-        });
-        await fs.promises.writeFile(tmpFile.path, task.cell.document.getText());
+        const tmpPath = path.join(os.tmpdir(), `prrompt_shell_${Date.now()}.tmp`);
+        await fs.promises.writeFile(tmpPath, task.cell.document.getText());
         const terminal = new TerminalRenderer();
         return new Promise<CellExecutionState>((resolve) => {
             let taskExited = false;
@@ -242,7 +232,7 @@ class ShellPty {
             const endTask = (success = true) => {
                 taskExited = true;
                 promise = promise.finally(() => task.end(true, Date.now()));
-                tmpFile.cleanupCallback();
+                fs.promises.unlink(tmpPath).catch(() => {});
                 terminal.dispose();
                 proc?.kill();
                 resolve(success ? CellExecutionState.success : CellExecutionState.error);
@@ -308,7 +298,7 @@ class ShellPty {
                             }
                         });
                 });
-                const shellCommand = `node ${quote([ShellPty.shellJsPath, tmpFile.path])}`;
+                const shellCommand = `node ${quote([ShellPty.shellJsPath, tmpPath])}`;
                 proc.write(`${shellCommand}\r`);
             } catch (ex) {
                 promise = promise.finally(() => {

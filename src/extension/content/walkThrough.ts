@@ -1,11 +1,12 @@
 import { CancellationTokenSource, commands, ExtensionContext, QuickPickItem, window, workspace } from 'vscode';
 import * as path from 'path';
-import { promises as fs } from "fs";
+import { promises as fs } from 'fs';
 import { notebookType } from '../const';
 import { ContentProvider } from '.';
 
 const samples: (QuickPickItem & { path: string; command: string })[] = [];
 // basics
+/*
 samples.push({
     command: 'node.notebook.sample.basics.richOutput',
     label: 'Generate rich outputs in node.js',
@@ -88,7 +89,7 @@ samples.push({
     description: 'arquero',
     path: path.join('resources', 'docs', 'arquero', 'htmlOutput.nnb')
 });
-
+*/
 export class Samples {
     public static regsiter(context: ExtensionContext) {
         context.subscriptions.push(

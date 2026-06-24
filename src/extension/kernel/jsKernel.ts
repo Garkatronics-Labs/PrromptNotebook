@@ -10,8 +10,8 @@ import {
     workspace
 } from 'vscode';
 import { IDisposable } from '../types';
-import * as getPort from 'get-port';
-import * as WebSocket from 'ws';
+import getPort from 'get-port';
+import WebSocket = require('ws');
 import { CellExecutionState } from './types';
 import * as path from 'path';
 import { ChildProcess, spawn } from 'child_process';
@@ -19,11 +19,8 @@ import { createDeferred, Deferred, generateId, noop } from '../coreUtils';
 import { ServerLogger } from '../serverLogger';
 import { CellOutput as CellOutput } from './cellOutput';
 import { getNotebookCwd } from '../utils';
-import { TensorflowVisClient } from '../tfjsvis';
 import { Compiler } from './compiler';
 import { CodeObject, RequestType, ResponseType } from '../server/types';
-import { getConfiguration, writeConfigurationToTempFile } from '../configuration';
-import { quote } from 'shell-quote';
 import { getNextExecutionOrder } from './executionOrder';
 import { DebuggerFactory } from './debugger/debugFactory';
 import { EOL } from 'os';
@@ -163,10 +160,10 @@ export class JavaScriptKernel implements IDisposable {
         return this.starting;
     }
     private async startInternal() {
-        const [port, debugPort, configFile] = await Promise.all([
+        const [port, debugPort] = await Promise.all([
             this.getPort(),
-            this.getPort(),
-            writeConfigurationToTempFile()
+            this.getPort()
+            // writeConfigurationToTempFile()
         ]);
         this.server = new WebSocket.Server({ port });
         this.server.on('connection', (ws) => {
@@ -204,15 +201,14 @@ export class JavaScriptKernel implements IDisposable {
                 'index.js'
             );
             ServerLogger.appendLine(`Starting node ${serverFile} & listening on ${debugPort} & websock on ${port}`);
-
-            this.serverProcess = spawn(
-                'node',
-                [`--inspect=${debugPort}`, serverFile, `--port=${port}`, `--config=${quote([configFile])}`],
-                {
-                    // this.serverProcess = spawn('node', [serverFile, `--port=${port}`], {
-                    cwd: this.cwd
-                }
+            const bunServerFile = path.join(
+                JavaScriptKernel.extensionDir.fsPath,
+                'src',
+                'extension',
+                'server',
+                'index.ts'
             );
+            this.serverProcess = spawn('bun', ['run', bunServerFile, `--port=${port}`], { cwd: this.cwd });
             this.serverProcess.on('close', (code: number) => {
                 ServerLogger.appendLine(`Server Exited, code = ${code}`);
             });
@@ -286,32 +282,7 @@ export class JavaScriptKernel implements IDisposable {
                 }, noop);
                 break;
             }
-            case 'tensorFlowVis': {
-                if (
-                    getConfiguration().inlineTensorflowVisualizations &&
-                    (message.request === 'history' ||
-                        message.request === 'scatterplot' ||
-                        message.request === 'linechart' ||
-                        message.request === 'heatmap' ||
-                        message.request === 'layer' ||
-                        message.request === 'valuesdistribution' ||
-                        // message.request === 'registerfitcallback' || // Disabled, as VSC is slow to display the output.
-                        // message.request === 'fitcallback' || // Disabled, as VSC is slow to display the output.
-                        message.request === 'table' ||
-                        message.request === 'perclassaccuracy' ||
-                        message.request === 'histogram' ||
-                        message.request === 'barchart' ||
-                        message.request === 'confusionmatrix' ||
-                        message.request === 'modelsummary')
-                ) {
-                    const item = this.tasks.get(message.requestId)?.stdOutput || this.getCellOutput();
-                    if (item) {
-                        item.appendTensorflowVisOutput(message);
-                    }
-                }
-                TensorflowVisClient.sendMessage(message);
-                break;
-            }
+
             case 'cellExec': {
                 const item = this.tasks.get(message.requestId);
                 if (item) {

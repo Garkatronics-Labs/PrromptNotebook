@@ -17,8 +17,6 @@ module.exports = {
                 return path.join('out', 'extension', 'server', 'index.js');
             } else if (pathData.chunk.name === 'test') {
                 return path.join('out', 'test', 'runTest.js');
-            } else if (pathData.chunk.name === 'typescript') {
-                return path.join('resources', 'scripts', 'node_modules', 'typescript', 'index.js');
             }
             return path.join('out', 'extension', 'index.js');
         },

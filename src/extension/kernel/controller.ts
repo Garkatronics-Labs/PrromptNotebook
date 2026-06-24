@@ -45,7 +45,7 @@ export class Controller implements IDisposable {
             this.disposables
         );
         workspace.onDidCloseNotebookDocument((e) => this.resetNotebook(e), this, this.disposables);
-        this.disposables.push(commands.registerCommand('node.kernel.restart', this.restart, this));
+        this.disposables.push(commands.registerCommand('prr.kernel.restart', this.restart, this));
     }
     public dispose() {
         disposeAllDisposables(this.disposables);
@@ -60,11 +60,11 @@ export class Controller implements IDisposable {
         );
         if (type === 'node') {
             controller.description = '';
-            controller.detail = 'Execute & debug JavaScript/TypeScript in node.js';
+            controller.detail = 'Execute & debug TypeScript AI agents';
             controller.supportedLanguages = ['typescript', 'javascript', 'html', 'shellscript', 'powershell'];
         } else {
             controller.description = 'JavaScript/TypeScript Kernel running in Browser';
-            controller.detail = 'Support for JavaScript in Notebooks';
+            controller.detail = 'Execute & debug TypeScript AI agents';
             controller.supportedLanguages = ['typescript', 'javascript', 'html', 'shellscript', 'powershell'];
         }
         controller.executeHandler = this.executeHandler;

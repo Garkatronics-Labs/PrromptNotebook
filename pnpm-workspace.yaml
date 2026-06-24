@@ -1,0 +1,7 @@
+allowBuilds:
+  '@tensorflow/tfjs-node': true
+  core-js: true
+  ejs: true
+  node-pty: true
+  preact: true
+  profoundjs-node-pty: true

@@ -1,403 +1,161 @@
 {
-    "name": "typescript-notebook",
-    "displayName": "Node.js Notebooks (REPL)",
-    "description": "Iterative & interactive programming for Node.js in JavaScript/TypeScript (REPL), with great support for Tensorflow.js, debugging, & more..",
-    "version": "2.0.5",
+    "name": "prrompt",
+    "displayName": "Prrompt",
+    "description": "Interactive notebook environment for orchestrating TypeScript AI agents.",
+    "version": "0.1.0",
     "engines": {
         "vscode": "^1.62.0"
     },
-    "publisher": "donjayamanne",
-    "author": {
-        "name": "Don Jayamanne"
-    },
+    "publisher": "prrompt",
+    "author": { "name": "Prrompt" },
     "license": "MIT",
-    "homepage": "https://github.com/DonJayamanne/typescript-notebook",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/DonJayamanne/typescript-notebook"
-    },
-    "bugs": {
-        "url": "https://github.com/DonJayamanne/typescript-notebook"
-    },
     "preview": true,
     "icon": "resources/icons/logo.png",
-    "galleryBanner": {
-        "color": "white",
-        "theme": "light"
-    },
-    "keywords": [
-        "notebook",
-        "REPL",
-        "typescript",
-        "javascript",
-        "tensorflow",
-        "plotly"
-    ],
-    "categories": [
-        "Other",
-        "Data Science",
-        "Machine Learning",
-        "Notebooks",
-        "Visualization"
-    ],
+    "keywords": ["notebook", "AI", "agents", "typescript"],
+    "categories": ["Other", "Notebooks"],
     "capabilities": {
-        "untrustedWorkspaces": {
-            "supported": true
-        },
+        "untrustedWorkspaces": { "supported": true },
         "virtualWorkspaces": true
     },
     "activationEvents": [
-        "onNotebook:node-notebook",
-        "onWalkthrough:plotlyWalkthrough",
-        "onWalkthrough:danfojsWalkthrough",
-        "onWalkthrough:tensorflowWalkthrough",
-        "onWalkthrough:nodeNotebookWalkthrough",
-        "onCommand:node.notebook.sample",
-        "onCommand:node.notebook.sample.plotly.saveToFile",
-        "onCommand:node.notebook.sample.plotly.embedInDiv",
-        "onCommand:node.notebook.sample.danfojs.htmlOutput",
-        "onCommand:node.notebook.sample.danfojs.plots",
-        "onCommand:node.notebook.sample.danfojs.embedInDiv",
-        "onCommand:node.notebook.sample.tensorflow.sample",
-        "onCommand:node.notebook.sample.tensorflow.tensorboard",
-        "onCommand:node.notebook.sample.basics.sample",
-        "onCommand:node.notebook.sample.basics.shellScripts",
-        "onCommand:node.notebook.sample.basics.tips",
-        "onCommand:node.notebook.sample.basics.richOutput",
-        "onCommand:node.notebook.sample.basics.debug",
-        "onCommand:node.notebook.sample.arquero.htmlOutput",
-        "onCommand:node.notebook.new",
-        "onCommand:node.notebook.newREPL",
-        "onRenderer:node-notebook-plot-renderer",
-        "onRenderer:tensorflow-vis-renderer"
+        "onNotebook:prr-notebook",
+        "onCommand:prr.notebook.new",
+        "onCommand:prr.notebook.newREPL"
     ],
     "main": "./out/extension/index.js",
     "contributes": {
         "commands": [
             {
                 "category": "Notebook",
-                "command": "node.notebook.new",
-                "title": "Node.js Notebook"
+                "command": "prr.notebook.new",
+                "title": "Prrompt Notebook"
             },
             {
                 "category": "Notebook",
-                "command": "node.notebook.sample",
-                "title": "Open a sample node.js notebook"
-            },
-            {
-                "category": "Notebook",
-                "command": "node.notebook.newREPL",
-                "title": "Open node.js REPL"
+                "command": "prr.notebook.newREPL",
+                "title": "Open Prrompt REPL"
             },
             {
                 "category": "Notebook",
                 "icon": "$(bug)",
-                "command": "node.notebook.debug",
-                "shortTitle": "Debugx",
+                "command": "prr.notebook.debug",
+                "shortTitle": "Debug",
                 "title": "Debug Notebook",
-                "enablement": "notebookType == 'node-notebook' && isWorkspaceTrusted"
+                "enablement": "notebookType == 'prr-notebook' && isWorkspaceTrusted"
             },
             {
                 "category": "Notebook",
                 "icon": "$(debug-restart)",
-                "command": "node.kernel.restart",
+                "command": "prr.kernel.restart",
                 "shortTitle": "Restart",
                 "title": "Restart Kernel",
-                "enablement": "notebookType == 'node-notebook' && isWorkspaceTrusted"
+                "enablement": "notebookType == 'prr-notebook' && isWorkspaceTrusted"
             },
             {
-                "command": "node.notebook.runAndDebugCell",
+                "command": "prr.notebook.runAndDebugCell",
                 "title": "Debug Cell",
                 "icon": "$(debug-alt-small)",
                 "category": "Notebook",
-                "enablement": "notebookType == 'node-notebook' && isWorkspaceTrusted"
+                "enablement": "notebookType == 'prr-notebook' && isWorkspaceTrusted"
             }
         ],
         "menus": {
             "commandPalette": [
                 {
-                    "command": "node.notebook.new",
-                    "title": "New Node Notebook",
+                    "command": "prr.notebook.new",
+                    "title": "New Prrompt Notebook",
                     "group": "Notebook"
                 },
+                { "command": "prr.notebook.debug", "when": "false" },
+                { "command": "prr.notebook.runAndDebugCell", "when": "false" },
                 {
-                    "command": "node.notebook.debug",
-                    "title": "Debug",
-                    "group": "Notebook",
-                    "when": "false"
-                },
-                {
-                    "command": "node.notebook.runAndDebugCell",
-                    "title": "Debug",
-                    "group": "Notebook",
-                    "when": "false"
-                },
-                {
-                    "command": "node.kernel.restart",
-                    "title": "Restart Kernel",
-                    "group": "Notebook",
-                    "when": "false && notebookType == 'node-notebook' && isWorkspaceTrusted"
+                    "command": "prr.kernel.restart",
+                    "when": "false && notebookType == 'prr-notebook' && isWorkspaceTrusted"
                 }
             ],
             "notebook/cell/execute": [
                 {
-                    "command": "node.notebook.runAndDebugCell",
-                    "when": "notebookType == 'node-notebook' && isWorkspaceTrusted && notebookCellType == code"
+                    "command": "prr.notebook.runAndDebugCell",
+                    "when": "notebookType == 'prr-notebook' && isWorkspaceTrusted && notebookCellType == code"
                 }
             ],
             "editor/title": [
                 {
-                    "command": "node.kernel.restart",
+                    "command": "prr.kernel.restart",
                     "group": "navigation@1",
-                    "when": "notebookType == 'node-notebook' && isWorkspaceTrusted"
+                    "when": "notebookType == 'prr-notebook' && isWorkspaceTrusted"
                 },
                 {
-                    "command": "node.notebook.debug",
+                    "command": "prr.notebook.debug",
                     "group": "navigation@3",
-                    "when": "notebookType == 'node-notebook' && isWorkspaceTrusted"
+                    "when": "notebookType == 'prr-notebook' && isWorkspaceTrusted"
                 }
             ],
             "file/newFile": [
-                {
-                    "command": "node.notebook.new"
-                }
+                { "command": "prr.notebook.new" }
             ]
         },
         "notebooks": [
             {
-                "type": "node-notebook",
-                "displayName": "Node.js Notebook",
-                "selector": [
-                    {
-                        "filenamePattern": "*.nnb"
-                    }
-                ]
-            }
-        ],
-        "viewsContainers": {
-            "activitybar": [
-                {
-                    "icon": "resources/icons/tf.svg",
-                    "id": "node-notebook",
-                    "title": "Tensorflow Visualization"
-                }
-            ]
-        },
-        "views": {
-            "node-notebook": [
-                {
-                    "name": "Tensorflow Visualization",
-                    "id": "tfjs-vis",
-                    "type": "webview",
-                    "when": "node_notebook.tfjs-vis.used && !config.node_notebook.disableTensorflowVis"
-                }
-            ]
-        },
-        "notebookRenderer": [
-            {
-                "id": "node-notebook-plot-renderer",
-                "entrypoint": "./out/views/plotGenerator.js",
-                "displayName": "Plotly Renderer",
-                "mimeTypes": [
-                    "application/vnd.ts.notebook.plotly+json"
-                ],
-                "requiresMessaging": "always"
-            },
-            {
-                "id": "tensorflow-vis-renderer",
-                "entrypoint": "./out/views/tfjsvisRenderer.js",
-                "requiresMessaging": "always",
-                "displayName": "Tensorflow Visualization",
-                "mimeTypes": [
-                    "application/vnd.tfjsvis",
-                    "application/vnd.tfjsvis.registerfitcallback",
-                    "application/vnd.tfjsvis.fitcallback",
-                    "application/vnd.tfjsvis.history",
-                    "application/vnd.tfjsvis.table",
-                    "application/vnd.tfjsvis.histogram",
-                    "application/vnd.tfjsvis.modelsummary",
-                    "application/vnd.tfjsvis.linechart",
-                    "application/vnd.tfjsvis.scatterplot",
-                    "application/vnd.tfjsvis.confusionmatrix",
-                    "application/vnd.tfjsvis.heatmap",
-                    "application/vnd.tfjsvis.barchart",
-                    "application/vnd.tfjsvis.perclassaccuracy",
-                    "application/vnd.tfjsvis.valuesdistribution",
-                    "application/vnd.tfjsvis.layer"
-                ]
+                "type": "prr-notebook",
+                "displayName": "Prrompt Notebook",
+                "selector": [{ "filenamePattern": "*.nnb" }]
             }
         ],
         "configuration": {
             "type": "object",
-            "title": "Typescript Notebook",
+            "title": "Prrompt",
             "properties": {
-                "node_notebook.registerTsNode": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Register ts-node that allows importing TypeScript modules without the user having to transpile TypeScript into JavaScript.",
-                    "scope": "machine"
-                },
-                "node_notebook.disableTensorflowVis": {
+                "prrompt.disablePseudoTerminal": {
                     "type": "boolean",
                     "default": false,
-                    "description": "Disables the Tensorflow Visualization panel (even if @tensorflow/tfjs-vis is used the panel will not be displayed.",
-                    "scope": "machine"
-                },
-                "node_notebook.disablePseudoTerminal": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Disables the pseudo terminal (backed by node-pty). If disabled, will always use process based shells which won't provide the best experience.",
-                    "scope": "machine"
-                },
-                "node_notebook.inlineTensorflowVisualizations": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Display tensorflow visualization within the notebook.",
+                    "description": "Disable pseudo terminal for shell cells.",
                     "scope": "machine"
                 }
             }
-        },
-        "walkthroughs": [
-            {
-                "id": "nodeNotebookWalkthrough",
-                "title": "Getting started with notebooks for node.js",
-                "description": "Run/debug node.js code within notebooks with rich visualizations & more.",
-                "featuredFor": [
-                    "node.js",
-                    "visualizations",
-                    "debug"
-                ],
-                "steps": [
-                    {
-                        "id": "nodeNotebookRichOutput",
-                        "title": "Rich outputs",
-                        "description": "Unlock power of notebooks to generate rich outputs in node.js (images, html, markdown, plots, etc).",
-                        "media": {
-                            "markdown": "resources/docs/basics/richOutput.md"
-                        }
-                    },
-                    {
-                        "id": "nodeNotebookDebug",
-                        "title": "Debugging",
-                        "description": "Debug javascript and typescript without installing typescript, including external javascript/typescript modules.",
-                        "media": {
-                            "markdown": "resources/docs/basics/debug.md"
-                        }
-                    },
-                    {
-                        "id": "tensorflowVis",
-                        "title": "Tensorflow visualizations in node.js",
-                        "description": "Tensorflow visualization ([@tensorflow/tfjs-vis](https://www.npmjs.com/package/@tensorflow/tfjs-vis)) are no longer limited to just browser environments.",
-                        "media": {
-                            "markdown": "resources/docs/tensorflow/sample.md"
-                        }
-                    },
-                    {
-                        "id": "tensorflowBoards",
-                        "title": "Tensorboards for Tensorflow.js in node.js",
-                        "description": "View tensorboards in Visual Studio Code.",
-                        "media": {
-                            "markdown": "resources/docs/tensorflow/tensorboard.md"
-                        }
-                    },
-                    {
-                        "id": "plotlyGenerate",
-                        "title": "Plotly plots node.js",
-                        "description": "Generate & view plotly plots in node.js.",
-                        "media": {
-                            "markdown": "resources/docs/plotly/generate.md"
-                        }
-                    },
-                    {
-                        "id": "danfojsHtmlOutput",
-                        "title": "Danfo.js with rich dataframes node.js",
-                        "description": "Generate and view rich Html outputs for dataframes and series when using danfo.js.",
-                        "media": {
-                            "markdown": "resources/docs/danfojs/htmlOutput.md"
-                        }
-                    },
-                    {
-                        "id": "danfojsPlots",
-                        "title": "Danfo.js plots in node.js",
-                        "description": "Generate & view danfor.js plots in node.js.",
-                        "media": {
-                            "markdown": "resources/docs/danfojs/plots.md"
-                        }
-                    },
-                    {
-                        "id": "samples",
-                        "title": "Sample notebooks",
-                        "description": "View a number of different sample notebooks",
-                        "command": "node.notebook.sample",
-                        "media": {
-                            "markdown": "resources/docs/basics/samples.md"
-                        }
-                    }
-                ]
-            }
-        ]
+        }
     },
     "scripts": {
         "vscode:prepublish": "npm run build",
         "dev": "concurrently -r npm:compile:extension:watch npm:compile:client:watch",
-        "installtsnode": "cd resources/scripts && npm i -S ts-node",
         "build": "webpack --config=build/webpack/webpack.config.js --mode=production",
         "compile:extension:watch": "tsc --watch -p ./",
         "compile:client:watch": "webpack --config=build/webpack/webpack.client.config.js --watch",
         "compile:extension:webpack": "webpack --config=build/webpack/webpack.extension.config.js",
-        "lint": "eslint src/client --ext ts && eslint src/extension --ext ts && eslint build --ext js",
-        "lint-format": "npx prettier 'src/**/*.ts*' --check && npx prettier 'build/**/*.js' --check",
-        "package": "vsce package --yarn -o node-notebooks.vsix",
+        "lint": "eslint src/extension --ext ts && eslint build --ext js",
+        "package": "vsce package --yarn -o prrompt.vsix",
         "test": "node ./out/test/runTest.js",
-        "prettier-fix": "prettier 'src/**/*.ts*' --write && prettier 'build/**/*.js' --write",
         "download-api": "vscode-dts dev",
         "postdownload-api": "vscode-dts main",
-        "fixNodeModule": "node build/fixNodeModules.js",
-        "postinstall": "npm run download-api && npm run installtsnode && npm run fixNodeModule"
+        "fixNodeModule": "node build/fixNodeModules.js"
     },
     "dependencies": {
-        "@tensorflow/tfjs-vis": "^1.5.1",
-        "acorn": "^8.4.1",
-        "acorn-walk": "^8.1.1",
-        "error-stack-parser": "^2.0.6",
-        "file-type": "^16.5.2",
+        "error-stack-parser": "^2.1.4",
         "get-port": "^5.1.1",
-        "is-plain-object": "^5.0.0",
-        "json-stringify-safe": "^5.0.1",
-        "kind-of": "^6.0.3",
         "node-pty": "^0.10.1",
-        "plotly.js-dist": "^2.3.1",
         "profoundjs-node-pty": "^2.0.3",
-        "recast": "^0.20.5",
         "shell-quote": "^1.7.2",
         "source-map": "^0.6.1",
-        "tmp": "^0.2.1",
-        "typescript": "^4.4.4",
         "uuid": "^8.3.2",
         "ws": "^7.5.3",
         "xterm": "^4.13.0",
         "yargs": "^17.0.1"
     },
     "devDependencies": {
-        "@babel/generator": "^7.15.0",
+        "@types/bun": "^1.3.14",
         "@types/mocha": "^9.0.0",
         "@types/node": "^14.0.1",
-        "@types/plotly.js": "^1.54.13",
         "@types/shell-quote": "^1.7.1",
-        "@types/tmp": "^0.2.1",
         "@types/uuid": "^8.3.1",
         "@types/vscode-notebook-renderer": "^1.57.9",
         "@types/vscode-webview": "^1.57.0",
-        "@types/ws": "^7.4.7",
+        "@types/ws": "^8.5.5",
         "@types/yargs": "^17.0.2",
         "@typescript-eslint/eslint-plugin": "^4.29.0",
         "@typescript-eslint/parser": "^4.29.0",
-        "arquero": "^4.8.4",
-        "cache-loader": "^4.1.0",
         "concurrently": "^5.2.0",
         "copy-webpack-plugin": "^9.0.1",
         "css-loader": "^3.5.3",
-        "danfojs-node": "^0.2.7",
         "eslint": "^7.32.0",
         "eslint-config-airbnb": "^18.2.1",
         "eslint-config-prettier": "^8.3.0",
@@ -408,17 +166,12 @@
         "eslint-plugin-prettier": "^3.4.0",
         "fork-ts-checker-webpack-plugin": "^6.2.10",
         "glob": "^7.1.6",
-        "ify-loader": "^1.1.0",
-        "install": "^0.13.0",
-        "less": "^3.11.3",
         "mocha": "^9.0.3",
-        "npm": "^6.14.5",
         "prettier": "^2.3.2",
         "style-loader": "^1.2.1",
         "svg-inline-loader": "^0.8.2",
         "thread-loader": "^2.1.3",
-        "transform-loader": "^0.2.4",
-        "ts-loader": "^7.0.5",
+        "ts-loader": "^9.6.2",
         "url-loader": "^4.1.0",
         "vscode-debugprotocol": "^1.48.0",
         "vscode-dts": "^0.3.1",
