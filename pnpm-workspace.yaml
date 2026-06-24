@@ -2,6 +2,17 @@ allowBuilds:
   '@tensorflow/tfjs-node': true
   core-js: true
   ejs: true
+  esbuild: set this to true or false
   node-pty: true
   preact: true
   profoundjs-node-pty: true
+minimumReleaseAgeExclude:
+  - ejs@3.1.7
+  - ejs@3.1.10
+  - postcss@8.4.31
+  - diff@8.0.3
+  - js-yaml@4.1.1
+  - serialize-javascript@7.0.3
+  - postcss@8.5.10
+  - serialize-javascript@7.0.5
+  - js-yaml@4.1.2

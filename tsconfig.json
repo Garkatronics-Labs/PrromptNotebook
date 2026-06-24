@@ -2,7 +2,8 @@
     "extends": "./src/tsconfig-base.json",
     "compilerOptions": {
         "rootDir": "src",
-        "module": "node16",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
         "target": "ES2022",
         "lib": [
             "ES2022",

@@ -1,6 +1,6 @@
 import { ContentProvider } from './content';
 import { registerDisposableRegistry } from './utils';
-import { ExtensionContext } from 'vscode';
+import { commands, ExtensionContext } from 'vscode';
 import { Controller } from './kernel';
 import { ServerLogger } from './serverLogger';
 import { DebuggerCommands } from './kernel/debugger/commands';

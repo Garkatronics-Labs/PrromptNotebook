@@ -1,6 +1,6 @@
-import { commands, ExtensionContext, NotebookCell, Uri, workspace } from 'vscode';
-import { Controller } from '..';
+import { commands, ExtensionContext, NotebookCell, Uri, window, workspace } from 'vscode';
 import { CellExecutionQueue } from '../cellExecutionQueue';
+import { Controller } from '../index';
 import { JavaScriptKernel } from '../jsKernel';
 import { DebuggerFactory } from './debugFactory';
 
@@ -22,6 +22,7 @@ export class DebuggerCommands {
                     queue.enqueueAndRun(cell);
                 } catch (error) {
                     console.error(error);
+                    window.showInformationMessage('Error!!!');
                 }
             })
         );
